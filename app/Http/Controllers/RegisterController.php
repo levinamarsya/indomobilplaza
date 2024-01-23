@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
@@ -41,29 +43,32 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        $validated_data = $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
             'email' => 'required|email:dns|unique:users,email',
             'password' => ['required', Password::min(8)->mixedCase()->numbers()],
             'confirm_password' => 'required|same:password',
-            'hp' => 'required|numeric|digits_between:9,11|unique:users,hp',
+            'hp' => 'required|numeric|digits_between:9,13|unique:users,hp',
             'address' => 'required',
             'city_id' => 'required'
         ],[
-            'email:dns' => 'Invalid Email.',
-            // 'hp.required' => 'The phone number field is required',
-            'same' => 'Password Not Same.'
+            'email' => 'Invalid Email.',
+            'same' => 'Password Not Same.',
+            'required' => 'Form must be filled'
         ],[
             'hp' => 'phone number',
             'city_id' => 'city',
             'confirm_password' => 'confirm password'
         ]);
+
+        if ($validator->fails()) {
+            // return redirect('/')->with('error', $validator->errors()->first());
+            return redirect('/')->withErrors($validator->errors()->first())->withInput();
+        }
+        $validated_data = $validator->validated();
         $validated_data['password'] = Hash::make($request['password']);
-        // dd($validated_data);
         User::create($validated_data);
-        // return redirect('/')->with('success', 'Registration succeed!');
-        // return response()->json(['code'=>200,'success' => true, 'message' => 'Registration succeed!']);
-        // Session::flash('success', 'Registration succeed!');
+        
         alert()->success('Success', 'Registration succeed!');
         return redirect('/');
     }
