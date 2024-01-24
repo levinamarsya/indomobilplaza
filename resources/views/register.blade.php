@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Open%20Sans' rel='stylesheet'>
-    <link rel="icon" href="/IPCMSLogo.png">
+    <link rel="icon" href="/images/IPCMSLogo.png">
     <link rel="stylesheet" href="/css/style.css">
     <title>Indomobil Plaza</title>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -17,7 +17,6 @@
     <!-- Sweet Alert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css">
 </head>
-{{-- <body style="font-family: 'Open Sans"> --}}
 <body>
     @include('sweetalert::alert')
     <div>
@@ -48,7 +47,7 @@
                 <div class="floating-form-label-content" style="position: relative;">
                     <input class="floating-form-input" placeholder=" " type="password" id="password" name="password">
                     <span style="position: absolute; right:15px; top:15px">
-                        <i class="fa fa-eye" id="toggle"></i>
+                        <i class="bi bi-eye-fill" id="toggle"></i>
                     </span>
                     <label class="floating-form-label" for="password">Password</label>
                     <div id="pass_msg">
@@ -58,7 +57,7 @@
                 <div class="floating-form-label-content">
                     <input class="floating-form-input" placeholder=" " type="password" id="confirm_password" name="confirm_password">
                     <span style="position: absolute; right:15px; top:15px">
-                        <i class="fa fa-eye" id="toggle2"></i>
+                        <i class="bi bi-eye-fill" id="toggle2"></i>
                     </span>
                     <label class="floating-form-label" for="confirm_password">Confirm Password</label>
                     <div id="pass_msg">
@@ -74,7 +73,7 @@
                     <label class="floating-form-label" for="address">Address</label>
                 </div>
                 <div class="floating-form-label-content">
-                    <select class="floating-form-select" id="city" name="city_id" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="">
+                    <select class="floating-form-select" id="city" name="city_id" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="{{ old('city_id') }}">
                         <option></option>
                         @foreach ($cities as $city)
                             @if ($city->id == old('city_id'))
@@ -83,8 +82,8 @@
                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                             @endif                
                         @endforeach
+                        
                     </select>
-                    {{-- <div id="arrow">&#129171;</div> --}}
                     <label class="floating-form-label" for="city">City</label>
                 </div>
                 <center><button id="submit" type="submit" class="btn btn-default btn-info">SIGN UP</button>
@@ -109,20 +108,20 @@
     toggle.addEventListener('click', function(){
         const type = password.getAttribute('type')
         password.setAttribute('type', type === 'password' ? 'text' : 'password')
-        cpassword.setAttribute('type', type === 'password' ? 'text' : 'password')
+        cpassword.setAttribute('type', password.getAttribute('type'))
 
         const c = toggle.getAttribute('class')
-        toggle.setAttribute('class', c === 'fa fa-eye' ? 'fa fa-eye-slash' : 'fa fa-eye')
-        toggle2.setAttribute('class', c === 'fa fa-eye' ? 'fa fa-eye-slash' : 'fa fa-eye')
+        toggle.setAttribute('class', c === 'bi bi-eye-fill' ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill')
+        toggle2.setAttribute('class', toggle.getAttribute('class'))
     })
     toggle2.addEventListener('click', function(){
         const type = cpassword.getAttribute('type')
-        password.setAttribute('type', type === 'password' ? 'text' : 'password')
         cpassword.setAttribute('type', type === 'password' ? 'text' : 'password')
+        password.setAttribute('type', cpassword.getAttribute('type'))
 
-        const c = toggle.getAttribute('class')
-        toggle.setAttribute('class', c === 'fa fa-eye' ? 'fa fa-eye-slash' : 'fa fa-eye')
-        toggle2.setAttribute('class', c === 'fa fa-eye' ? 'fa fa-eye-slash' : 'fa fa-eye')
+        const c = toggle2.getAttribute('class')
+        toggle2.setAttribute('class', c === 'bi bi-eye-fill' ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill')
+        toggle.setAttribute('class', toggle2.getAttribute('class'))
     })
 </script>
 </html>

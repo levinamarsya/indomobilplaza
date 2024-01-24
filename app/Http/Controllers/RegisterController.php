@@ -62,14 +62,13 @@ class RegisterController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // return redirect('/')->with('error', $validator->errors()->first());
             return redirect('/')->withErrors($validator->errors()->first())->withInput();
         }
         $validated_data = $validator->validated();
         $validated_data['password'] = Hash::make($request['password']);
         User::create($validated_data);
         
-        alert()->success('Success', 'Registration succeed!');
+        alert()->success('Success', 'Registration success!');
         return redirect('/');
     }
 
